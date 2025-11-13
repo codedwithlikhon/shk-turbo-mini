@@ -1,0 +1,27 @@
+# data-ingest schema (CI-friendly defaults)
+ingest:
+  sources:
+    - name: public_github
+      type: git_archive
+      enabled: false
+      config:
+        repo_list: []
+        license_filter: ["mit","bsd","apache-2.0"]
+    - name: internal_docs
+      type: file_dir
+      enabled: false
+      config:
+        path: /secure/path/to/docs
+        redact: true
+  retrieval:
+    vector_store: faiss
+    embedding_model: "sentence-transformers/all-MiniLM-L6-v2"
+    index_path: "data/indices/faiss.index"
+  governance:
+    pii_detection: true
+    license_check: true
+    provenance: true
+    retention_days: 365
+  ingestion_batch:
+    max_files_per_job: 100
+    max_tokens_per_file: 100000

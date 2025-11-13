@@ -1,0 +1,10 @@
+{
+  "vocab_size": 18,
+  "hidden_size": 128,
+  "num_layers": 2,
+  "num_heads": 4,
+  "batch_size": 2,
+  "seq_len": 64,
+  "dropout": 0.1,
+  "activation_function": "gelu"
+}

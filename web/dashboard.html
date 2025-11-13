@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>shk-turbo-mini Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav id="sidebar">
+    <h2>Projects</h2>
+    <ul id="project-list"></ul>
+  </nav>
+  <main id="main">
+    <header>
+      <h1>Run Viewer</h1>
+      <div id="controls">
+        <button id="refresh">Refresh</button>
+      </div>
+    </header>
+    <section id="content">
+      <div id="log-pane" class="panel">
+        <h3>Live Logs</h3>
+        <pre id="logs">No logs yet</pre>
+      </div>
+      <div id="metrics-pane" class="panel">
+        <h3>Metrics</h3>
+        <div id="metrics">--</div>
+      </div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
