@@ -1,34 +1,53 @@
 
 import os
+import json
 import torch
 from torch.utils.data import Dataset
 
+def build_vocab(data_path):
+    """Builds a character vocabulary from the data file."""
+    try:
+        with open(data_path, 'r', encoding='utf-8') as f:
+            text = f.read()
+    except FileNotFoundError:
+        print(f"Error: Data file not found at {data_path}. Cannot build vocab.")
+        return 0, {}, {}
+
+    chars = sorted(list(set(text)))
+    # Add a padding token
+    if '<pad>' not in chars:
+        chars.append('<pad>')
+    char_to_idx = {ch: i for i, ch in enumerate(chars)}
+    idx_to_char = {i: ch for i, ch in enumerate(chars)}
+    return len(chars), char_to_idx, idx_to_char
+
 class TextDataset(Dataset):
-    def __init__(self, data_path, seq_len):
-        # A real implementation would involve a proper tokenizer and data processing.
-        # For this placeholder, we'll just read the number of lines to simulate having a dataset.
+    def __init__(self, data_path, seq_len, char_to_idx):
+        self.seq_len = seq_len
+        self.char_to_idx = char_to_idx
+        self.pad_token_id = self.char_to_idx.get('<pad>', 0)
+
         try:
             with open(data_path, 'r', encoding='utf-8') as f:
-                self.num_lines = sum(1 for line in f)
+                self.lines = f.readlines()
         except FileNotFoundError:
-            print(f"Warning: Data file not found at {data_path}. Creating dummy data.")
-            self.num_lines = 1000 # Create dummy data if file doesn't exist.
-            # Create a dummy file so the script doesn't crash
-            os.makedirs(os.path.dirname(data_path), exist_ok=True)
-            with open(data_path, 'w', encoding='utf-8') as f:
-                for _ in range(self.num_lines):
-                    f.write("This is a dummy line.\n")
-
-        self.seq_len = seq_len
+            print(f"Error: Data file not found at {data_path}. Dataset will be empty.")
+            self.lines = []
 
     def __len__(self):
-        return self.num_lines
+        return len(self.lines)
 
     def __getitem__(self, idx):
-        # In a real scenario, you would read the specific line, tokenize it,
-        # and return a tensor of shape (seq_len).
-        # Here we just return a random tensor as a placeholder.
-        return torch.randint(0, 30522, (self.seq_len,))
+        line = self.lines[idx].strip()
+        tokenized_line = [self.char_to_idx.get(char, self.pad_token_id) for char in line]
+
+        # Pad or truncate
+        if len(tokenized_line) < self.seq_len:
+            tokenized_line += [self.pad_token_id] * (self.seq_len - len(tokenized_line))
+        else:
+            tokenized_line = tokenized_line[:self.seq_len]
+
+        return torch.tensor(tokenized_line, dtype=torch.long)
 
 class MiniLLM(torch.nn.Module):
     def __init__(self, vocab_size, hidden_size, num_layers, num_heads, dropout, activation_function):

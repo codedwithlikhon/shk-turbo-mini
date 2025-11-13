@@ -2,7 +2,6 @@
 
 # --- Configuration ---
 MODEL_NAME="shk-turbo-mini"
-VOCAB_SIZE=30522
 HIDDEN_SIZE=512
 NUM_LAYERS=6
 NUM_HEADS=8
@@ -41,6 +40,11 @@ echo "This is a dummy fine-tuning training sentence." > $FT_TRAIN_DATA
 echo "This is a dummy fine-tuning validation sentence." > $FT_VALID_DATA
 
 # --- Script ---
+
+# Build vocabulary
+echo "--- Building Vocabulary ---"
+python build_vocab.py $TRAIN_DATA
+VOCAB_SIZE=$(python -c "import json; print(json.load(open('vocab.json'))['vocab_size'])")
 
 # Create model directory
 mkdir -p $MODEL_NAME

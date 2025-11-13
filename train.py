@@ -63,9 +63,14 @@ def main():
     # Causal mask
     mask = torch.nn.Transformer.generate_square_subsequent_mask(config["seq_len"]).to(device)
 
+    # Load vocabulary
+    with open("vocab.json", "r") as f:
+        vocab = json.load(f)
+    char_to_idx = vocab["char_to_idx"]
+
     # Setup data loaders
-    train_dataset = TextDataset(args.train_data, config["seq_len"])
-    valid_dataset = TextDataset(args.valid_data, config["seq_len"])
+    train_dataset = TextDataset(args.train_data, config["seq_len"], char_to_idx)
+    valid_dataset = TextDataset(args.valid_data, config["seq_len"], char_to_idx)
     train_loader = DataLoader(train_dataset, batch_size=config["batch_size"])
     valid_loader = DataLoader(valid_dataset, batch_size=config["batch_size"])
 

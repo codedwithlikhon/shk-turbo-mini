@@ -71,9 +71,14 @@ def main():
         for param in model.transformer_encoder.parameters():
             param.requires_grad = False
 
+    # Load vocabulary
+    with open("vocab.json", "r") as f:
+        vocab = json.load(f)
+    char_to_idx = vocab["char_to_idx"]
+
     # Setup data loaders
-    train_dataset = TextDataset(args.train_data, config["seq_len"])
-    valid_dataset = TextDataset(args.valid_data, config["seq_len"])
+    train_dataset = TextDataset(args.train_data, config["seq_len"], char_to_idx)
+    valid_dataset = TextDataset(args.valid_data, config["seq_len"], char_to_idx)
     train_loader = DataLoader(train_dataset, batch_size=config["batch_size"])
     valid_loader = DataLoader(valid_dataset, batch_size=config["batch_size"])
 
