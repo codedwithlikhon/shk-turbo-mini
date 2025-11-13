@@ -1,0 +1,12 @@
+:root{
+  --bg:#0e0f12;--panel:#111217;--muted:#9aa5b1;--accent:#4fc3f7;
+  --mono: "Fira Mono", "Courier New", monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,Arial;background:var(--bg);color:#e6eef6}
+#sidebar{width:220px;padding:16px;position:fixed;height:100%;background:linear-gradient(180deg,#0b0c0f, #0f1114)}
+#main{margin-left:240px;padding:20px}
+header{display:flex;justify-content:space-between;align-items:center}
+.panel{background:var(--panel);padding:12px;border-radius:8px;margin-bottom:12px}
+#logs{height:320px;overflow:auto;background:#060608;padding:12px;border-radius:6px;font-family:var(--mono);font-size:13px}
+button{background:var(--accent);border:none;color:#071123;padding:8px 10px;border-radius:6px;cursor:pointer}
